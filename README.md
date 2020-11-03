@@ -11,6 +11,8 @@ This is, at the moment, a very crude mod without any GUI. It does it's job in a 
 - [x] **Export item plain .txt list (easy copy-paste into Sheets or something);**
 - [x] **Export item JSON list with IDs, names (as in-game) and snake-lower case names (like_this_example).**
 
+![Example of exported resources](https://i.imgur.com/H1iwYJu.jpeg)
+
 ##  Usage
  
 Use command: **/dae all**
