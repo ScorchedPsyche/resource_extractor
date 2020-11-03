@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "resource_extractor",
+  "version": "${version}",
+  "name": "Resource Extractor",
+  "description": "A Fabric mod that let's you extract Minecraft's resources into files like .json, .png, .txt, etc, for you to use wherever you want.",
+  "authors": [
+    "ScorchedPsyche"
+  ],
+  "contact": {
+    "website": "https://github.com/ScorchedPsyche/"
+  },
+  "license": "MIT",
+  "icon": "assets/resource_extractor/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "com.github.scorchedpsyche.resource_extractor.client.Resource_extractorClient"
+    ],
+    "main": [
+      "com.github.scorchedpsyche.resource_extractor.Resource_extractor"
+    ]
+  },
+  "mixins": [
+    "resource_extractor.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.10.6+build.214",
+    "fabric": "*",
+    "minecraft": "1.16.4"
+  }
+}

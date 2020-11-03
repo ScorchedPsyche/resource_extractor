@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.github.scorchedpsyche.resource_extractor.mixins",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "SimpleRegistryMixin",
+    "MinecraftClientMixin",
+    "ItemRendererMixin"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
