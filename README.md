@@ -11,5 +11,11 @@ This is, at the moment, a very crude mod without any GUI. It does it's job in a 
 - [x] **Export item plain .txt list (easy copy-paste into Sheets or something);**
 - [x] **Export item JSON list with IDs, names (as in-game) and snake-lower case names (like_this_example).**
 
+##  Usage
+ 
+Use command: **/dae all**
+
+Images and lists, for now, are being exported inside **/screenshots/**.
+
 ##  Send your suggestions
 Let me know what else you'd like the mod to extract from Minecraft into a usable already converted file.
