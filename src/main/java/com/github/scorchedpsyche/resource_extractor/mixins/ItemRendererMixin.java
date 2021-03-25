@@ -43,11 +43,15 @@ public class ItemRendererMixin {
     private void onRenderGuiItemModelScale(CallbackInfo ci){
         if(Render.RenderIcon.doIconRender){
             if(Render.RenderIcon.selectedSize != 0){
-                RenderSystem.scalef(
+                RenderSystem.getModelViewStack().push();
+
+                RenderSystem.getModelViewStack().scale(
                         Render.RenderIcon.scale[Render.RenderIcon.selectedSize],
                         Render.RenderIcon.scale[Render.RenderIcon.selectedSize],
                         Render.RenderIcon.scale[Render.RenderIcon.selectedSize]
                 );
+
+                RenderSystem.applyModelViewMatrix();
             }
         }
     }

@@ -3,8 +3,11 @@ package com.github.scorchedpsyche.resource_extractor;
 import com.github.scorchedpsyche.resource_extractor.interfaces.IItemsList;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.BackgroundRenderer;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Util;
 import net.minecraft.util.registry.Registry;
 import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
@@ -19,19 +22,21 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.*;
 import java.util.List;
 
 import static net.minecraft.client.MinecraftClient.IS_SYSTEM_MAC;
 import static org.lwjgl.opengl.GL11.*;
 
 public class Render {
+    private static File saveDirectory;
+    private static final MinecraftClient client = MinecraftClient.getInstance();
+
     public static class RenderIcon{
         public static boolean doIconRender = false;
 
-        private static final MinecraftClient client = MinecraftClient.getInstance();
         public static final float[] scale = new float[]         {
                 1.0F,   1.5F,   2.0F,   2.5F,   3F,     3.5F,   4F,     4.5F,
                 5.0F,   5.5F,   6.0F,   6.5F,   7.0F,   7.5F,   8.0F,   8.5F,
@@ -56,6 +61,7 @@ public class Render {
         public static int selectedSize = 0;
 
         public static void doRender(){
+            configureSaveDirectoryIfNeeded();
             if(doIconRender){ RenderIcon.renderItems(); }
         }
 
@@ -74,7 +80,6 @@ public class Render {
                 String itemName = item.getName().getString();
                 String itemNameLowerCaseWithUnderscore =
                         item.getName().getString().toLowerCase().replaceAll("\\s+", "_");
-
 
                 Utils.overlayMessage(
                         itemNbr +
@@ -95,17 +100,21 @@ public class Render {
 
                 jsonArray.put(jsonObj);
                 itemsList.add(itemName);
+
+//                // Debug Only
+//                if( itemNbr == 10 )
+//                {
+//                    break;
+//                }
             }
 
-
-            File directory = new File(client.runDirectory.getAbsolutePath()+"/screenshots/");
-            if( !directory.exists() )
+            if( !saveDirectory.exists() )
             {
-                directory.mkdirs();
+                saveDirectory.mkdirs();
             }
 
-            File file = new File(directory + "/items_list.json"); // The file to save to.
-            File file2 = new File(directory + "/items_list.txt"); // The file to save to.
+            File file = new File(saveDirectory + "/items_list.json"); // The file to save to.
+            File file2 = new File(saveDirectory + "/items_list.txt"); // The file to save to.
 
             Collections.sort(itemsList);
 
@@ -127,32 +136,44 @@ public class Render {
 
             RenderSystem.clear(16640, IS_SYSTEM_MAC);
             client.getFramebuffer().beginWrite(true);
+            RenderSystem.setShaderFogStart(3.4028235E38F);
+
+            client.getProfiler().push("display");
+            RenderSystem.enableTexture();
+            RenderSystem.enableCull();
+
+            client.getProfiler().pop();
+            client.getProfiler().pop();
+
+            client.getProfiler().push("gameRenderer");
+            client.gameRenderer.render(client.getTickDelta(), Util.getMeasuringTimeMs(), true);
+
+            client.getProfiler().swap("toasts");
+            client.getToastManager().draw(new MatrixStack());
+            client.getProfiler().pop();
+
+            client.getProfiler().push("blit");
+            client.getFramebuffer().endWrite();
+
             RenderSystem.enableBlend();
             RenderSystem.blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             RenderSystem.clearColor(0, 0, 0, 0);
             RenderSystem.clear(GL_COLOR_BUFFER_BIT, glError);
 
-            RenderSystem.enableTexture();
-
-            client.getFramebuffer().endWrite();
-            RenderSystem.popMatrix();
-            RenderSystem.pushMatrix();
             client.getFramebuffer().draw(client.getFramebuffer().viewportWidth, client.getFramebuffer().viewportHeight);
 
             client.getItemRenderer().renderGuiItemIcon(
                     new ItemStack(item),
                     0 + imageOffset[selectedSize],
                     client.getFramebuffer().viewportHeight - imageDimensions[selectedSize] + imageOffset[selectedSize]
-//                    0 + imageOffset[selectedSize],
-//                    client.getFramebuffer().viewportHeight - imageDimensions[selectedSize] + imageOffset[selectedSize]
+
             );
 
             GL11.glReadBuffer(GL11.GL_BACK);
+
         }
 
         public static void saveToFile(String itemName){
-//            int imgSizeX = client.getFramebuffer().viewportWidth;
-//            int imgSizeY = client.getFramebuffer().viewportHeight;{
             int imgSizeX = imageDimensions[selectedSize];
             int imgSizeY = imageDimensions[selectedSize];
 
@@ -160,7 +181,7 @@ public class Render {
             ByteBuffer buffer = BufferUtils.createByteBuffer(imgSizeX * imgSizeY * bpp);
             GL11.glReadPixels(0, 0, imgSizeX, imgSizeY, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
 
-            File directory = new File(client.runDirectory.getAbsolutePath()+"/screenshots/" + imageDimensions[selectedSize] + "x" + imageDimensions[selectedSize]);
+            File directory = new File(saveDirectory + "/" + imageDimensions[selectedSize] + "x" + imageDimensions[selectedSize]);
             if(!directory.exists()){
                 directory.mkdirs();
             }
@@ -191,6 +212,21 @@ public class Render {
 
         public static void addToJson(){
 
+        }
+
+        private static void configureSaveDirectoryIfNeeded()
+        {
+            saveDirectory = new File(client.runDirectory.getAbsolutePath()+"/screenshots/resource_extractor/");
+
+            if( saveDirectory.exists() )
+            {
+                try {
+                    FileUtils.deleteDirectory(saveDirectory);
+                }
+                catch(Exception e) {
+                    //  Block of code to handle errors
+                }
+            }
         }
     }
 }
