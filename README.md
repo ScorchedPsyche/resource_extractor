@@ -4,6 +4,10 @@ A Fabric mod that let's you extract Minecraft's resources into files like .json,
 
 This is, at the moment, a very crude mod without any GUI. It does it's job in a simple and crude way without much ease of use.
 
+- Current dimensions are:  
+*16, 24, 32, 40, 48, 56, 64, 72,80, 88, 96, 104, 112, 120, 128, 136,144, 152, 160, 168, 176, 184, 192, 200,208, 216, 224, 232, 240, 248, 256*.
+
+
 **Status reference:**
 
 ![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) `Not yet implemented`  
@@ -12,7 +16,7 @@ This is, at the moment, a very crude mod without any GUI. It does it's job in a 
 
 ##  Features
 
-![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+) Export item's icons to .PNG. Current dimensions: *16, 24, 32, 40, 48, 56, 64, 72,80, 88, 96, 104, 112, 120, 128, 136,144, 152, 160, 168, 176, 184, 192, 200,208, 216, 224, 232, 240, 248, 256*;  
+![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+) Export item's icons to .PNG;  
 ![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) Export entity's icons to .PNG;  
 ![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+) Export item plain .txt list (easy copy-paste into Sheets or something);  
 ![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+) Export item JSON list with IDs, names (as in-game) and snake-lower case names (like_this_example).
