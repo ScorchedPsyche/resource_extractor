@@ -1,6 +1,6 @@
 package com.github.scorchedpsyche.resource_extractor.mixins;
 
-import com.github.scorchedpsyche.resource_extractor.Render;
+import com.github.scorchedpsyche.resource_extractor.main.Render;
 import net.minecraft.client.MinecraftClient;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

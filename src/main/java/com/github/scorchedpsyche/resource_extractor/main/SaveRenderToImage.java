@@ -1,4 +1,4 @@
-package com.github.scorchedpsyche.resource_extractor;
+package com.github.scorchedpsyche.resource_extractor.main;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.MinecraftClient;

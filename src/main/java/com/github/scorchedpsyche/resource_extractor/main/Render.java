@@ -1,9 +1,8 @@
-package com.github.scorchedpsyche.resource_extractor;
+package com.github.scorchedpsyche.resource_extractor.main;
 
 import com.github.scorchedpsyche.resource_extractor.interfaces.IItemsList;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.BackgroundRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -22,8 +21,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.*;
 import java.util.List;
 
@@ -41,21 +38,24 @@ public class Render {
                 1.0F,   1.5F,   2.0F,   2.5F,   3F,     3.5F,   4F,     4.5F,
                 5.0F,   5.5F,   6.0F,   6.5F,   7.0F,   7.5F,   8.0F,   8.5F,
                 9.0F,   9.5F,   10.0F,  10.5F,  11.0F,  11.5F,  12.0F,  12.5F,
-                13.0F,  13.5F,  14.0F,  14.5F,  15.0F,  15.5F,  16.0F
+                13.0F,  13.5F,  14.0F,  14.5F,  15.0F,  15.5F,  16.0F,  32.0F,
+                64F
             };
 
         public static final int[] imageDimensions = new int[]   {
                 16,     24,     32,     40,     48,     56,     64,     72,
                 80,     88,     96,     104,    112,    120,    128,    136,
                 144,    152,    160,    168,    176,    184,    192,    200,
-                208,    216,    224,    232,    240,    248,    256
+                208,    216,    224,    232,    240,    248,    256,    512,
+                1024
             };
 
         public static final int[] imageOffset = new int[]       {
                 0,      4,      8,      12,     16,     20,     24,     28,
                 32,     36,     40,     44,     48,     52,     56,     60,
                 64,     68,     72,     76,     80,     84,     88,     92,
-                96,     100,    104,    108,    112,    116,    120
+                96,     100,    104,    108,    112,    116,    120,    240,
+                480
             };
 
         public static int selectedSize = 0;
@@ -101,11 +101,11 @@ public class Render {
                 jsonArray.put(jsonObj);
                 itemsList.add(itemName);
 
-//                // Debug Only
-//                if( itemNbr == 10 )
-//                {
-//                    break;
-//                }
+                // Debug Only
+                if( itemNbr == 5 )
+                {
+                    break;
+                }
             }
 
             if( !saveDirectory.exists() )
@@ -140,7 +140,8 @@ public class Render {
 
             client.getProfiler().push("display");
             RenderSystem.enableTexture();
-            RenderSystem.enableCull();
+            RenderSystem.disableCull();
+//            RenderSystem.enableCull();
 
             client.getProfiler().pop();
             client.getProfiler().pop();

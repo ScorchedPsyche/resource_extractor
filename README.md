@@ -25,7 +25,8 @@ This is, at the moment, a very crude mod without any GUI. It does it's job in a 
 
 ##  Usage
  
-Use command: **/dae all**
+Use command: **/re render all**
+Use command: **/re extract all**
 
 Images and lists, for now, are being exported inside **/screenshots/**.
 

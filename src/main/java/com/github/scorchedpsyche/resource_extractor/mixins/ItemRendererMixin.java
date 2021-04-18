@@ -1,6 +1,6 @@
 package com.github.scorchedpsyche.resource_extractor.mixins;
 
-import com.github.scorchedpsyche.resource_extractor.Render;
+import com.github.scorchedpsyche.resource_extractor.main.Render;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.render.item.ItemRenderer;
 import org.spongepowered.asm.mixin.Mixin;
