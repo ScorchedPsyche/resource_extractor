@@ -30,6 +30,7 @@ import static org.lwjgl.opengl.GL11.*;
 public class Render {
     private static File saveDirectory;
     private static final MinecraftClient client = MinecraftClient.getInstance();
+    private static Boolean wasFullScreen;
 
     public static class RenderIcon{
         public static boolean doIconRender = false;
@@ -62,7 +63,17 @@ public class Render {
 
         public static void doRender(){
             configureSaveDirectoryIfNeeded();
-            if(doIconRender){ RenderIcon.renderItems(); }
+            if( wasFullScreen == null )
+            {
+                wasFullScreen = client.getWindow().isFullscreen();
+            }
+
+            if(doIconRender && client.getWindow().isFullscreen()){ RenderIcon.renderItems(); }
+
+            if( !client.getWindow().isFullscreen() )
+            {
+                client.getWindow().toggleFullscreen();
+            }
         }
 
         public static void renderItems(){
@@ -101,11 +112,11 @@ public class Render {
                 jsonArray.put(jsonObj);
                 itemsList.add(itemName);
 
-                // Debug Only
-                if( itemNbr == 5 )
-                {
-                    break;
-                }
+//                // DEBUG ONLY
+//                if( itemNbr == 5 )
+//                {
+//                    break;
+//                }
             }
 
             if( !saveDirectory.exists() )
@@ -126,7 +137,12 @@ public class Render {
                 e.printStackTrace();
             }
 
+            if( wasFullScreen != client.getWindow().isFullscreen() )
+            {
+                client.getWindow().toggleFullscreen();
+            }
             Render.RenderIcon.doIconRender = false;
+            Utils.say("Finished rendering!");
         }
 
         public static void renderItem(Item item, int size){
@@ -140,8 +156,7 @@ public class Render {
 
             client.getProfiler().push("display");
             RenderSystem.enableTexture();
-            RenderSystem.disableCull();
-//            RenderSystem.enableCull();
+            RenderSystem.enableCull();
 
             client.getProfiler().pop();
             client.getProfiler().pop();
